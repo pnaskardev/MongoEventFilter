@@ -20,8 +20,6 @@ export class MongoService {
   private static async createClient(config: DatabaseConfig): Promise<void> {
     if (!this.client) {
       try {
-        logger.info("Initializing MongoDB client...");
-
         this.client = new MongoClient(config.connectionString, {
           serverApi: {
             version: ServerApiVersion.v1,
