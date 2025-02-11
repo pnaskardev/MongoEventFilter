@@ -1,0 +1,16 @@
+{
+  "environment": "NODE_ENV",
+  "port": "PORT",
+  "defaultKey": "DEFAULT_KEY",
+  "database": {
+    "connectionString": "",
+    "databaseName": "",
+    "collection": ""
+  },
+  "cache": {
+    "connectionString": "",
+    "connectionPort": "",
+    "username": "",
+    "password": ""
+  }
+}

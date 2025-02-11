@@ -1,0 +1,16 @@
+{
+    "environment": "NODE_ENV",
+    "port": "PORT",
+    "defaultKey": "DEFAULT_KEY",
+    "database": {
+        "connectionString": "DB_CONNECTION_STRING",
+        "databaseName": "DB_NAME",
+        "collection": "DB_COLLECTION"
+    },
+    "cache": {
+        "connectionString": "REDIS_CONNECTION_STRING",
+        "connectionPort": "REDIS_PORT",
+        "username": "REDIS_USERNAME",
+        "password": "REDIS_PASSWORD"
+    }
+}
