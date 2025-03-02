@@ -1,4 +1,3 @@
-import "jsr:@std/dotenv/load";
 import { MongoService } from "./services/dbService.ts";
 import { RedisService } from "./services/cacheService.ts";
 const main = async () => {
@@ -8,6 +7,8 @@ const main = async () => {
     const dbClient = MongoService.getClient();
 
     await RedisService.connect();
+
+    console.log("HI Deno");
 
     // listen to the collection
     const collection = dbClient.db("Stream").collection("stream-collection");

@@ -6,7 +6,6 @@
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "npm:@types/node@*": "22.5.4",
     "npm:config@^3.3.12": "3.3.12",
-    "npm:dotenv@^16.4.7": "16.4.7",
     "npm:express@^4.21.2": "4.21.2",
     "npm:mongodb@^6.12.0": "6.12.0",
     "npm:mongodb@^6.13.0": "6.13.0",
@@ -216,9 +215,6 @@
     },
     "destroy@1.2.0": {
       "integrity": "sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg=="
-    },
-    "dotenv@16.4.7": {
-      "integrity": "sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ=="
     },
     "dunder-proto@1.0.1": {
       "integrity": "sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==",
@@ -708,7 +704,6 @@
     "dependencies": [
       "jsr:@std/assert@1",
       "npm:config@^3.3.12",
-      "npm:dotenv@^16.4.7",
       "npm:express@^4.21.2",
       "npm:mongodb@^6.12.0",
       "npm:winston@^3.17.0"
