@@ -48,4 +48,6 @@ if (import.meta.main) {
   main();
 }
 
-setInterval(RescueManager.rescueTasks, 60_000); // every 60 seconds
+setInterval(function () {
+  RescueManager.rescueTasks(INSTANCE_ID);
+}, 60_000); // every 60 seconds

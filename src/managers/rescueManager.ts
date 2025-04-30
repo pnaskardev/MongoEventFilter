@@ -34,6 +34,8 @@ export class RescueManager {
           cursor,
           { COUNT: BATCH_SIZE }
         );
+
+        console.log(`Pending Messages ${instanceId} - ${result.messages}`);
         if (result.messages.length === 0) break;
 
         // Process the items
