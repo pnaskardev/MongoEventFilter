@@ -32,6 +32,7 @@ export class TaskWorker {
       );
 
       if (response) {
+        // No need to run a for loop cause we have set COUNT as 1
         for (const stream of response) {
           //   Stream data type
           // const stream: {

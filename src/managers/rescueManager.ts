@@ -1,39 +1,60 @@
-import { RedisClientType } from "redis";
 import { RedisService } from "../services/cacheService.ts";
-
-const RESCUE_TIMEOUT_MS = 5 * 60 * 1000;
+import { CONSUMER_GROUP, STREAM_KEY } from "../config/constants.ts";
+import TaskProcessor from "./taskProcessor.ts";
+import TaskManager from "./taskManager.ts";
+import { commandOptions } from "redis";
 
 export class RescueManager {
-  static async rescueTasks() {
-    const redisClient: RedisClientType = RedisService.getClient();
+  static async rescueTasks(instanceId: string) {
+    try {
+      const redisClient = RedisService.getClient();
 
-    const pickupKeys = await redisClient.keys("task:pickup:*");
+      let cursor = "0-0";
+      const IDLE_TIMEOUT = 60_000; // 1 minute
+      const BATCH_SIZE = 10;
 
-    for (const key of pickupKeys) {
-      const taskId = key.split(":")[2];
-      const isDone = await redisClient.exists(`task:done:${taskId}`);
+      while (true) {
+        // const result = await redisClient.xAutoClaim(
+        // commandOptions({ isolated: true }),
+        //   STREAM_KEY,
+        //   CONSUMER_GROUP,
+        //   "60_000",
+        //   0,
+        //   "0-0"
+        // ); // >>> ['1692629925790-0', [('1692629925789-0', {'rider': 'Royce'})]]
+        // console.log(result.nextId, result.messages);
 
-      //   task is done do nothing
-      if (isDone) continue;
+        // THis will get 10 pending messages from the start and will get the next cursor id as well
+        const result = await redisClient.xAutoClaim(
+          commandOptions({ isolated: true }),
+          STREAM_KEY,
+          CONSUMER_GROUP,
+          instanceId,
+          IDLE_TIMEOUT,
+          cursor,
+          { COUNT: BATCH_SIZE }
+        );
+        if (result.messages.length === 0) break;
 
-      const data = await redisClient.get(key);
+        // Process the items
 
-      //   no data available do nothing
-      if (!data) continue;
+        result.messages.forEach(async (pendingMessage) => {
+          if (pendingMessage === null || pendingMessage === undefined) return;
+          const { id, message } = pendingMessage;
 
-      if (data === null || data === undefined) {
-        continue;
+          try {
+            await TaskProcessor.process(id, instanceId, message);
+            await TaskManager.ackTask(id);
+          } catch (error) {
+            console.log(`Error occured while rescuing the task ${id}-${error}`);
+          }
+        });
+
+        // change the cursor to the nect cursor
+        cursor = result.nextId;
       }
-      const { pickedAt } = JSON.parse(data);
-      const timeSincePickup = Date.now() - pickedAt;
-
-      if (timeSincePickup > RESCUE_TIMEOUT_MS) {
-        console.log(`🛟 Rescuing stuck task ${taskId}`);
-
-        await redisClient.del(key);
-        await redisClient.del(`task:enqueued:${taskId}`);
-        await redisClient.rPush("task_queue", taskId);
-      }
+    } catch (error) {
+      console.log(`Error while rescuing tasks ${error}`);
     }
   }
 }
