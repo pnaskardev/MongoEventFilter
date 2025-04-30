@@ -3,7 +3,7 @@ class TaskProcessor {
     console.log(`⚙️ [${instanceId}] Processing task ${taskId}`);
 
     // Simulate doing some work
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 20000));
 
     console.log(`✅ [${instanceId}] Completed task ${taskId}`);
   }
